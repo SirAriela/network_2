@@ -87,7 +87,7 @@ def server(host: str, port: int) -> None:
         # SO_REUSEADDR is a socket option that allows the socket to be bound to an address that is already in use.
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-        # Prepare the server socket
+        # Prepare the server socket so it could listen to the client
         # * Fill in start (1)
         server_socket.bind((host, port))
         server_socket.listen()
@@ -100,7 +100,7 @@ def server(host: str, port: int) -> None:
             try:
                 # Establish connection with client.
                 
-                client_socket, address = client_socket, address = server_socket.accept()
+                client_socket, address = address = server_socket.accept()
 
                 # Create a new thread to handle the client request
                 thread = threading.Thread(target=client_handler, args=(
@@ -124,11 +124,12 @@ def client_handler(client_socket: socket.socket, client_address: tuple[str, int]
     with client_socket:  # closes the socket when the block is exited
         print(f"Conection established with {client_addr}")
         while True:
-            
-            data = data = client_socket.recv(api.BUFFER_SIZE)
-            if not data: # * Change in start (1)
+
+            # whenever a client sends a request load it and analyze it
+            data = client_socket.recv(api.BUFFER_SIZE)
+            if not data:
                 break
-                # * Change in end (1)
+
             try:
 
                 try:
@@ -146,6 +147,7 @@ def client_handler(client_socket: socket.socket, client_address: tuple[str, int]
                     f"{client_prefix} Sending response of length {len(response)} bytes")
 
                 # * Fill in start (4)
+                # send the response to the client
                 client_socket.sendall(response)
                 # * Fill in end (4)
 
@@ -154,9 +156,8 @@ def client_handler(client_socket: socket.socket, client_address: tuple[str, int]
                 client_socket.sendall(api.CalculatorHeader.from_error(
                     e, api.CalculatorHeader.STATUS_SERVER_ERROR, CACHE_POLICY, CACHE_CONTROL).pack())
 
-            # * Change in start (2)
             print(f"{client_prefix} Connection closed")
-            # * Change in end (2)
+
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(
