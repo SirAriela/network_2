@@ -123,9 +123,10 @@ def client_handler(client_socket: socket.socket, client_address: tuple[str, int]
             
             data = client_socket.recv(api.BUFFER_SIZE)
             
-            if not data: # * Change in start (1)
+            if not data:
+                client_socket.close()
                 break
-                # * Change in end (1)
+
             try:
                 # Process the request
                 try:
