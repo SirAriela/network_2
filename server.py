@@ -128,6 +128,7 @@ def client_handler(client_socket: socket.socket, client_address: tuple[str, int]
             # whenever a client sends a request load it and analyze it
             data = client_socket.recv(api.BUFFER_SIZE)
             if not data:
+                client_socket.close()
                 break
 
             try:

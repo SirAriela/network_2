@@ -89,9 +89,9 @@ if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(description="A Calculator Client.")
 
     arg_parser.add_argument("-p", "--port", type=int,
-                            default=api.DEFAULT_SERVER_PORT, help="The port to connect to.")
+                            default=api.DEFAULT_PROXY_PORT, help="The port to connect to.")
     arg_parser.add_argument("-H", "--host", type=str,
-                            default=api.DEFAULT_SERVER_HOST, help="The host to connect to.")
+                            default=api.DEFAULT_PROXY_HOST, help="The host to connect to.")
 
     args = arg_parser.parse_args()
 
@@ -101,8 +101,7 @@ if __name__ == "__main__":
     # * Change in start (1)
     # Example expressions: (uncomment one of them for your needs)
     # (1) '(sin(max(2, 3 * 4, 5, 6 * ((7 * 8) / 9), 10 / 11)) / 12) * 13' = -0.38748277824137206
-   # expr = mul_b(div_b(sin_f(max_f(2, mul_b(3, 4), 5, mul_b(
-    #    6, div_b(mul_b(7, 8), 9)), div_b(10, 11))), 12), 13)  # (1)
+    expr = mul_b(div_b(sin_f(max_f(2, mul_b(3, 4), 5, mul_b(6, div_b(mul_b(7, 8), 9)), div_b(10, 11))), 12), 13)  # (1)
 
     # (2) '(max(2, 3) + 3)' = 6
     #expr = add_b(max_f(2, 3), 3)
@@ -117,7 +116,7 @@ if __name__ == "__main__":
     # expr = neg_u(neg_u(pow_b(add_b(1, add_b(2, 3)), neg_u(add_b(4, 5))))) # (5)
 
     # (6) 'max(2, (3 * 4), log(e), (6 * 7), (9 / 8))' = 42
-    expr = max_f(2, mul_b(3, 4), log_f(e_c), mul_b(6, 7), div_b(9, 8)) # (6)
+    # expr = max_f(2, mul_b(3, 4), log_f(e_c), mul_b(6, 7), div_b(9, 8)) # (6)
     # * Change in end (1)
 
     # Change the following values according to your needs:
